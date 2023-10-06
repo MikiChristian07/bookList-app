@@ -20,7 +20,7 @@ UI.prototype.addBook = function(newBook){
                      <td><a href='#' class="btn btn-danger">X</a></td>`;
     list.appendChild(row);
 
-    // console.log(list);
+    console.log(list);
 }
 
 UI.prototype.clearFields = function(){
