@@ -17,7 +17,7 @@ UI.prototype.addBook = function(newBook){
     row.innerHTML = `<td>${newBook.title}</td>
                      <td>${newBook.author}</td>
                      <td>${newBook.isbn}</td>
-                     <td><a href='#' class="btn btn-danger">X</a></td>`;
+                     <td><a href='#' class="delete">X</a></td>`;
     list.appendChild(row);
 }
 
@@ -39,7 +39,14 @@ UI.prototype.showAlert = function (message, className) {
     // Remove error after 3secs
     setTimeout(function(){
         div.remove();
-    }, 3000); 
+    }, 2000); 
+}
+
+// Delete Book
+UI.prototype.deleteBook = function(target){
+    if (target.className === 'delete'){
+        target.parentElement.parentElement.remove();
+    }
 }
 
 // Clear fields
@@ -49,7 +56,7 @@ UI.prototype.clearFields = function(){
     document.getElementById('isbn').value = '';
 }
 
-//Event Listeners
+//Event Listener for Add Book
 document.getElementById('book-form').addEventListener('submit', function(e){
 
     // Get form values 
@@ -63,6 +70,8 @@ document.getElementById('book-form').addEventListener('submit', function(e){
 
     //Instantiate Ui
     const ui = new UI();
+
+    console.log(ui);
 
     // Validate
     if(title === '' || author === '' || isbn === ''){
@@ -81,4 +90,19 @@ document.getElementById('book-form').addEventListener('submit', function(e){
 
 
     e.preventDefault();
+})
+
+// Event Listener for Delete Book
+document.getElementById('book-list').addEventListener('click', function(e) {
+
+        //Instantiate Ui
+        const ui = new UI();
+
+        // Delete Book
+        ui.deleteBook(e.target);
+
+        // Show message
+        ui.showAlert('Book Deleted!','success');
+
+        e.preventDefault();
 })
