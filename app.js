@@ -19,10 +19,30 @@ UI.prototype.addBook = function(newBook){
                      <td>${newBook.isbn}</td>
                      <td><a href='#' class="btn btn-danger">X</a></td>`;
     list.appendChild(row);
-
-    console.log(list);
 }
 
+// Show Alert
+UI.prototype.showAlert = function (message, className) {
+    // Create div
+    const div = document.createElement('div');
+    // Add class
+    div.className = className;
+    // Add text 
+    div.innerHTML = message;
+    // Get parent
+    const container = document.querySelector('.container')
+    const form = document.querySelector('#book-form');
+
+    // Insert error alert in page
+    container.insertBefore(div, form);
+
+    // Remove error after 3secs
+    setTimeout(function(){
+        div.remove();
+    }, 3000); 
+}
+
+// Clear fields
 UI.prototype.clearFields = function(){
     document.getElementById('title').value = '';
     document.getElementById('author').value = '';
@@ -41,14 +61,23 @@ document.getElementById('book-form').addEventListener('submit', function(e){
     // Instantiate new book 
     const newBook = new Book(title, author, isbn);
 
-    //Innstantiate Ui
+    //Instantiate Ui
     const ui = new UI();
 
-    // Add book to list
-    ui.addBook(newBook);
+    // Validate
+    if(title === '' || author === '' || isbn === ''){
+        // Error Alert
+        ui.showAlert('Please fill in all fields', 'error');
+    } else {
+        // Add book to list
+        ui.addBook(newBook);
 
-    // Clear Fields
-    ui.clearFields();
+        // Clear Fields
+        ui.clearFields();
+
+        // Success Alert
+        ui.showAlert('Book Added!','success');
+    }
 
 
     e.preventDefault();
