@@ -9,7 +9,12 @@ function Book(title, author, isbn){
 function UI(){
 
 }
+
+// Local Storage Constructor  
+function Store(){
  
+}
+
 // Add Book to list
 UI.prototype.addBook = function(newBook){
     const list = document.getElementById('book-list');
@@ -55,6 +60,56 @@ UI.prototype.clearFields = function(){
     document.getElementById('author').value = '';
     document.getElementById('isbn').value = '';
 }
+
+// Get books form LS
+Store.prototype.getBooks = function(){
+        let books;
+
+        if (localStorage.getItem('books') === null){
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+        }
+
+        return books;
+
+}
+
+// Display Books in UI
+Store.prototype.displayBooks = function(){
+    const books = Store.getBooks();
+
+    books.forEach(book => {
+        const ui = new UI();
+
+        // Add book to the ui
+        ui.addBook(book);
+    });
+}
+
+// Add Book to LS
+Store.prototype.addBook = function(book) {
+    const books = Store.getBooks();
+    books.push(book);
+    localStorage.setItem('books', JSON.stringify(books));
+}
+
+// Remove Book from LS
+Store.prototype.removeBook = function(isbn) {
+    const books = Store.getBooks();
+
+    books.forEach((book, index) => {
+        if (book.isbn === isbn){
+            books.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('books', JSON.stringify(books));   
+}
+
+// DOM Load Event
+document.addEventListener('DOMContentLoaded', Store.displayBooks);
+
 
 //Event Listener for Add Book
 document.getElementById('book-form').addEventListener('submit', function(e){
